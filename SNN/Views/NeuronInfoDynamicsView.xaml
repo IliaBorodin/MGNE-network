@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="SNN.Views.NeuronInfoDynamicsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SNN.Views"
+             xmlns:other="clr-namespace:SNN.Other"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/SNN;component/Styles/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <other:BoolToVisibilityConverter x:Key="converter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+
+    <Border Background="#BBC1D1" CornerRadius="10">
+        <StackPanel>
+            <StackPanel>
+                <TextBlock Text="Название"/>
+                <TextBlock Text="{Binding Visualization.Name}"/>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="Мембранный потенциал"/>
+                <TextBlock Text="{Binding MembranePotential}"/>
+            </StackPanel>
+            <StackPanel>
+                <TextBlock Text="Время до события"/>
+                <TextBlock Text="{Binding TimeToEventStr}"/>
+            </StackPanel>
+            <StackPanel>
+                <Button Content="Активировать"
+                        Command="{Binding ActivateForGraphCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Style="{DynamicResource ProButtonStyle}"
+                        Margin="5"
+                        Visibility="{Binding ReadyForGraph, Converter={StaticResource converter}}"/>
+                <Button Content="Деактивировать"
+                        Command="{Binding DeactivateForGraphCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Style="{DynamicResource ProButtonStyle}"
+                        Margin="5"
+                        Visibility="{Binding ReadyNotForGraph, Converter={StaticResource converter}}"/>
+            </StackPanel>
+            
+        </StackPanel>
+    </Border>
+</UserControl>

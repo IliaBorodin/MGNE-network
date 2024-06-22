@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="SNN.Views.NeuronConfigView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SNN.Views"
+             xmlns:converters="clr-namespace:SNN.Other"            
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+              MouseEnter="UserControl_MouseEnter"
+             MouseLeave="UserControl_MouseLeave">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/SNN;component/Styles/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:StatusTypeToVisibilityConverter x:Key="StatusTypeToVisibilityConverter"/>
+            <converters:BoolToVisibilityConverter x:Key="converter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border Background="#0FA3B1" CornerRadius="10">
+        <StackPanel Margin="10" Style="{DynamicResource TabItemStackPanelStyle}">
+            <StackPanel Margin="10">
+                <TextBlock Text="Название" Style="{DynamicResource TextStyle}"/>
+                <TextBox x:Name="neuronName" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+            <StackPanel Margin="10">
+                <TextBlock Text="Начальное состояние" Style="{DynamicResource TextStyle}"/>
+                <ComboBox ItemsSource="{Binding ConnectionTypes}"
+                          SelectedItem="{Binding SelectedConnectionType, UpdateSourceTrigger=PropertyChanged}"
+                          DisplayMemberPath="Name"/>
+            </StackPanel>
+
+            <!-- Membrane Potential Input -->
+            <StackPanel Margin="10">
+                <TextBlock Text="Введите значение мембранного потенциала" Style="{DynamicResource TextStyle}"/>
+                <TextBlock Text="{Binding MembranePotentialRange}" Style="{DynamicResource TextStyle}"/>
+                <TextBox x:Name="membranePotentialTextBox">
+                    <TextBox.Text>
+                        <Binding Path="MembranePotential" UpdateSourceTrigger="LostFocus"/>
+                    </TextBox.Text>
+                </TextBox>
+
+
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" >
+                <Button x:Name="deleteButton" Command="{Binding NeuronDeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Style="{DynamicResource ProButtonStyle}" Margin="0,0,10,0">
+                    <Image Source="pack://application:,,,/SNN;component/Resources/delete.png" Width="16" Height="16" Margin="0,0,0,0"/>
+                </Button>
+                <Button Command="{Binding WeightCreateCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Style="{DynamicResource ProButtonStyle}" >Добавить связь</Button>
+            </StackPanel>
+
+            <StackPanel Visibility="{Binding ParameterQValue,RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource converter}}">
+                <Button Content="Добавить внешнее воздействие"
+             Command="{Binding ActivateForExternalCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+             Style="{DynamicResource ProButtonStyle}"
+             Margin="5"
+             Visibility="{Binding ReadyForExternal, Converter={StaticResource converter}}"/>
+                <Button Content="Убрать внешнее воздействие"
+             Command="{Binding DeactivateForExternalCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+             Style="{DynamicResource ProButtonStyle}"
+             Margin="5"
+             Visibility="{Binding ReadyNotForExternal, Converter={StaticResource converter}}"/>
+            </StackPanel>
+           
+        </StackPanel>
+        
+    </Border>
+</UserControl>
